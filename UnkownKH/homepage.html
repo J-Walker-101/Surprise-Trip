@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Trip</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@700&display=swap');
+        
+        body {
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+            background: url('sea.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 10px;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        .day {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            font-weight: bold;
+            color: #008080;
+            position: relative;
+            cursor: not-allowed;
+            transition: 0.3s;
+        }
+        .day:hover {
+            transform: scale(1.05);
+        }
+        .lock {
+            font-size: 28px;
+            display: block;
+            margin-top: 10px;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+        .details {
+            display: none;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #008080;
+        }
+        #countdown {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 20px;
+            font-family: 'Orbitron', monospace;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 30px;
+        }
+        .label {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        #tripContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #tripTitle {
+            margin-right: 10px;
+        }
+        #tripSymbols {
+            min-width: 100px;
+            display: inline-block;
+            text-align: left;
+        }
+        .reveal-message {
+            font-family: Arial, sans-serif;
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        @media (max-width: 600px) {
+            .day {
+                padding: 25px;
+                font-size: 16px;
+            }
+            .lock {
+                font-size: 24px;
+            }
+            #countdown {
+                font-size: 30px;
+                padding: 10px;
+            }
+            .time-box {
+                font-size: 24px;
+            }
+            .label {
+                font-size: 12px;
+            }
+            #tripContainer {
+                font-size: 36px;
+                flex-direction: column;
+            }
+            #tripTitle {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="tripContainer">
+        <span id="tripTitle">Trip to</span>
+        <span id="tripSymbols">! @ # $ %</span>
+    </div>
+    <p class="reveal-message">Click on each day to reveal a new surprise - Available on Christmas!</p>
+    <div class="calendar">
+        <script>
+            for (let i = 1; i <= 8; i++) {
+                document.write(`
+                    <div class="day">
+                        Day ${i}
+                        <span class="lock">🔒</span>
+                        <div id="details${i}" class="details">Details for day ${i}...</div>
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+    <div id="countdown">
+        <div class="time-box"><span id="days">00</span><span class="label">DAYS</span></div>
+        <div class="time-box"><span id="hours">00</span><span class="label">HOURS</span></div>
+        <div class="time-box"><span id="minutes">00</span><span class="label">MINUTES</span></div>
+        <div class="time-box"><span id="seconds">00</span><span class="label">SECONDS</span></div>
+    </div>
+    <script>
+        function updateCountdown() {
+            const tripDate = new Date("January 6, 2026 00:00:00").getTime();
+            const now = new Date().getTime();
+            const timeLeft = tripDate - now;
+            
+            document.getElementById("days").innerText = String(Math.floor(timeLeft / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        function animateSymbols() {
+            const symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "?", "~"];
+            setInterval(() => {
+                document.getElementById("tripSymbols").innerText = Array(5).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join(" ");
+            }, 150);
+        }
+        animateSymbols();
+    </script>
+</body>
+</html>
